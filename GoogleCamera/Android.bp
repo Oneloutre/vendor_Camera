@@ -2,7 +2,9 @@
 genrule {
     name: "merge_google_camera_b1c1",
     srcs: [
-        "*.part", // Matches all files ending with .part
+        "GoogleCamera.apk.00.part",
+        "GoogleCamera.apk.01.part",
+        "GoogleCamera.apk.02.part", // Matches all files ending with .part
     ],
     out: ["GoogleCamera_b1c1.apk"],
     cmd: "cat $(in) > $(out)",
@@ -12,15 +14,16 @@ genrule {
 android_app_import {
     name: "GoogleCamera_b1c1",
     apk: ":merge_google_camera_b1c1", // Reference the output of the genrule
-    certificate: "platform",
+    preprocessed: true,
+    presigned: true,
     owner: "google",
+    skip_preprocessed_apk_checks: true,
     overrides: [
         "Snap",
         "Camera2",
         "Aperture",
         "GCamGOPrebuilt-V3",
     ],
-    privileged: true,
     dex_preopt: {
         enabled: false,
     },
